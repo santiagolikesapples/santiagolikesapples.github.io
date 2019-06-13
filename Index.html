@@ -1,0 +1,409 @@
+<html>
+<head>
+    <title>Santiago's Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+       h1 {
+      text-align: center;
+    }  
+    .flex-container {
+      display: flex;
+      height: 500px;
+      background-color: DodgerBlue;
+    } 
+    .flex-container > div {
+      background-color: #f1f1f1;
+      margin: 10px;
+      padding: 20px;
+      font-size: 30px;
+      flex: 1;
+    }
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }    
+    .dropbtn:hover, .dropbtn:focus {
+      background-color: #3e8e41;
+    }
+    #myInput {
+      box-sizing: border-box;
+      background-image: url('searchicon.png');
+      background-position: 14px 12px;
+      background-repeat: no-repeat;
+      font-size: 16px;
+      padding: 14px 20px 12px 45px;
+      border: none;
+      border-bottom: 1px solid #ddd;
+    }  
+    #myInput:focus {outline: 3px solid #ddd;}  
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    } 
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f6f6f6;
+      min-width: 230px;
+      overflow: auto;
+      border: 1px solid #ddd;
+      z-index: 1;
+      height: 250px;
+    }   
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }  
+    .dropdown a:hover {background-color: #ddd;} 
+    .show {display: block;}
+    </style>
+</head>
+<body bgcolor="#F6F2F2" data-gr-c-s-loaded="true">
+    <table align ="center" width="800px" cellpadding="15px">
+        <tbody>
+            <tr>
+                <td bgcolor ="#F5B041">
+                    <h3 align="center">Datawheel</h3>
+                    <h3 align="center">Santiago Soulayrac</h3>
+                    <h3 align="center">My First Project</h3>
+                    <hr width="75%">
+                    <center></center>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  <script src="https://d3plus.org/js/d3plus.v2.0.0-alpha.17.full.min.js"></script>
+  <div class="dropdown">
+    <button onclick="myFunction()" class="dropbtn">Filter</button>
+    <div id="myDropdown" class="dropdown-content">
+      <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+      <a href="#Afghanistan" onclick="johnOpella(this)" >Afghanistan</a>
+      <a href="#Albania" onclick="johnOpella(this)" >Albania</a>
+      <a href="#Andorra" onclick="johnOpella(this)">Andorra</a>
+      <a href="#Angola" onclick="johnOpella(this)" >Angola</a>
+      <a href="#Antigua and Barbuda" onclick="johnOpella(this)" >Antigua and Barbuda</a>
+      <a href="#Argentina" onclick="johnOpella(this)" >Argentina</a>
+      <a href="#Armenia" onclick="johnOpella(this)" >Armenia</a>
+      <a href="#Aruba" onclick="johnOpella(this)" >Aruba</a>
+      <a href="#Australia" onclick="johnOpella(this)" >Australia</a>
+      <a href="#Austria" onclick="johnOpella(this)" >Austria</a>
+      <a href="#Azerbaijan" onclick="johnOpella(this)" >Azerbaijan</a>
+      <a href="#Bahrain" onclick="johnOpella(this)" >Bahrain</a>
+      <a href="#Bangladesh" onclick="johnOpella(this)" >Bangladesh</a>
+      <a href="#Barbados" onclick="johnOpella(this)" >Barbados</a>
+      <a href="#Belarus" onclick="johnOpella(this)" >Belarus</a>
+      <a href="#Belgium" onclick="johnOpella(this)" >Belgium</a>
+      <a href="#Belize" onclick="johnOpella(this)" >Belize</a>
+      <a href="#Bermuda" onclick="johnOpella(this)" >Bermuda</a>
+      <a href="#Bolivia" onclick="johnOpella(this)" >Bolivia</a>
+      <a href="#Bosnia and Herzegovina" onclick="johnOpella(this)" >Bosnia and Herzegovina</a>
+      <a href="#Botswana" onclick="johnOpella(this)" >Botswana</a>
+      <a href="#Brazil" onclick="johnOpella(this)" >Brazil</a>
+      <a href="#British Virgin Islands" onclick="johnOpella(this)" >British Virgin Islands</a>
+      <a href="#Brunei" onclick="johnOpella(this)" >Brunei</a>
+      <a href="#Bulgaria" onclick="johnOpella(this)" >Bulgaria</a>
+      <a href="#Burkina Faso" onclick="johnOpella(this)" >Burkina Faso</a>
+      <a href="#Burundi" onclick="johnOpella(this)" >Burundi</a>
+      <a href="#Cambodia" onclick="johnOpella(this)" >Cambodia</a>
+      <a href="#Cameroon" onclick="johnOpella(this)" >Cameroon</a>
+      <a href="#Canada" onclick="johnOpella(this)" >Canada</a>
+      <a href="#Chile" onclick="johnOpella(this)" >Chile</a>
+      <a href="#China" onclick="johnOpella(this)" >China</a>
+      <a href="#Colombia" onclick="johnOpella(this)" >Colombia</a>
+      <a href="#Congo" onclick="johnOpella(this)" >Congo</a>
+      <a href="#Costa Rica" onclick="johnOpella(this)" >Costa Rica</a>
+      <a href="#Croatia" onclick="johnOpella(this)" >Croatia</a>
+      <a href="#Cuba" onclick="johnOpella(this)" >Cuba</a>
+      <a href="#Curaçao" onclick="johnOpella(this)" >Curaçao</a>
+      <a href="#Cyprus" onclick="johnOpella(this)" >Cyprus</a>
+      <a href="#Czechia" onclick="johnOpella(this)" >Czechia</a>
+      <a href="#Denmark" onclick="johnOpella(this)" >Denmark</a>
+      <a href="#Dominican Republic" onclick="johnOpella(this)" >Dominican Republic</a>
+      <a href="#Ecuador" onclick="johnOpella(this)" >Ecuador</a>
+      <a href="#Egypt" onclick="johnOpella(this)" >Egypt</a>
+      <a href="#El Salvador" onclick="johnOpella(this)" >El Salvador</a>
+      <a href="#Estonia" onclick="johnOpella(this)" >Estonia</a>
+      <a href="#European Union" onclick="alpine(this)" >European Union</a>
+      <a href="#Fiji" onclick="johnOpella(this)" >Fiji</a>
+      <a href="#Finland" onclick="johnOpella(this)" >Finland</a>
+      <a href="#France" onclick="johnOpella(this)" >France</a>
+      <a href="#French Polynesia" onclick="johnOpella(this)" >French Polynesia</a>
+      <a href="#Georgia" onclick="johnOpella(this)" >Georgia</a>
+      <a href="#Germany" onclick="johnOpella(this)" >Germany</a>
+      <a href="#Ghana" onclick="johnOpella(this)" >Ghana</a>
+      <a href="#Greece" onclick="johnOpella(this)" >Greece</a>
+      <a href="#Guatemala" onclick="johnOpella(this)" >Guatemala</a>
+      <a href="#Guyana" onclick="johnOpella(this)" >Guyana</a>
+      <a href="#Haiti" onclick="johnOpella(this)" >Haiti</a>
+      <a href="#Honduras" onclick="johnOpella(this)" >Honduras</a>
+      <a href="#Hong Kong" onclick="johnOpella(this)" >Hong Kong</a>
+      <a href="#Hungary" onclick="johnOpella(this)" >Hungary</a>
+      <a href="#India" onclick="johnOpella(this)" >India</a>
+      <a href="#Indonesia" onclick="johnOpella(this)" >Indonesia</a>
+      <a href="#Iran" onclick="johnOpella(this)" >Iran</a>
+      <a href="#Iraq" onclick="johnOpella(this)" >Iraq</a>
+      <a href="#Ireland" onclick="johnOpella(this)" >Ireland</a>
+      <a href="#Israel" onclick="johnOpella(this)" >Israel</a>
+      <a href="#Italy" onclick="johnOpella(this)" >Italy</a>
+      <a href="#Ivory Coast" onclick="johnOpella(this)" >Ivory Coast</a>
+      <a href="#Jamaica" onclick="johnOpella(this)" >Jamaica</a>
+      <a href="#Japan" onclick="johnOpella(this)" >Japan</a>
+      <a href="#Jordan" onclick="johnOpella(this)" >Jordan</a>
+      <a href="#Kazakhstan" onclick="johnOpella(this)" >Kazakhstan</a>
+      <a href="#Kenya" onclick="johnOpella(this)" >Kenya</a>
+      <a href="#Kuwait" onclick="johnOpella(this)" >Kuwait</a>
+      <a href="#Kyrgyzstan" onclick="johnOpella(this)" >Kyrgyzstan</a>
+      <a href="#Laos" onclick="johnOpella(this)" >Laos</a>
+      <a href="#Latvia" onclick="johnOpella(this)" >Latvia</a>
+      <a href="#Lebanon" onclick="johnOpella(this)" >Lebanon</a>
+      <a href="#Libya" onclick="johnOpella(this)" >Libya</a>
+      <a href="#Liechtenstein" onclick="johnOpella(this)" >Liechtenstein</a>
+      <a href="#Lithuania" onclick="johnOpella(this)" >Lithuania</a>
+      <a href="#Luxembourg" onclick="johnOpella(this)" >Luxembourg</a>
+      <a href="#Macao" onclick="johnOpella(this)" >Macao</a>
+      <a href="#Macedonia" onclick="johnOpella(this)" >Macedonia</a>
+      <a href="#Madagascar" onclick="johnOpella(this)" >Madagascar</a>
+      <a href="#Malawi" onclick="johnOpella(this)" >Malawi</a>
+      <a href="#Malaysia" onclick="johnOpella(this)" >Malaysia</a>
+      <a href="#Mali" onclick="johnOpella(this)" >Mali</a>
+      <a href="#Malta" onclick="johnOpella(this)" >Malta</a>
+      <a href="#Mauritius" onclick="johnOpella(this)" >Mauritius</a>
+      <a href="#Mexico" onclick="johnOpella(this)" >Mexico</a>
+      <a href="#Moldova" onclick="johnOpella(this)" >Moldova</a>
+      <a href="#Monaco" onclick="johnOpella(this)" >Monaco</a>
+      <a href="#Mongolia" onclick="johnOpella(this)" >Mongolia</a>
+      <a href="#Montenegro" onclick="johnOpella(this)" >Montenegro</a>
+      <a href="#Morocco" onclick="johnOpella(this)" >Morocco</a>
+      <a href="#Mozambique" onclick="johnOpella(this)" >Mozambique</a>
+      <a href="#Myanmar [Burma]" onclick="johnOpella(this)" >Myanmar [Burma]</a>
+      <a href="#Namibia" onclick="johnOpella(this)" >Namibia</a>
+      <a href="#Nepal" onclick="johnOpella(this)" >Nepal</a>
+      <a href="#Netherlands" onclick="johnOpella(this)" >Netherlands</a>
+      <a href="#New Caledonia" onclick="johnOpella(this)" >New Caledonia</a>
+      <a href="#New Zealand" onclick="johnOpella(this)" >New Zealand</a>
+      <a href="#Nicaragua" onclick="johnOpella(this)" >Nicaragua</a>
+      <a href="#Niger" onclick="johnOpella(this)" >Niger</a>
+      <a href="#Nigeria" onclick="johnOpella(this)" >Nigeria</a>
+      <a href="#Norway" onclick="johnOpella(this)" >Norway</a>
+      <a href="#Oman" onclick="johnOpella(this)" >Oman</a>
+      <a href="#Pakistan" onclick="johnOpella(this)" >Pakistan</a>
+      <a href="#Panama" onclick="johnOpella(this)" >Panama</a>
+      <a href="#Papua New Guinea" onclick="johnOpella(this)" >Papua New Guinea</a>
+      <a href="#Paraguay" onclick="johnOpella(this)" >Paraguay</a>
+      <a href="#Peru" onclick="johnOpella(this)" >Peru</a>
+      <a href="#Philippines" onclick="johnOpella(this)" >Philippines</a>
+      <a href="#Poland" onclick="johnOpella(this)" >Poland</a>
+      <a href="#Portugal" onclick="johnOpella(this)" >Portugal</a>
+      <a href="#Puerto Rico" onclick="johnOpella(this)" >Puerto Rico</a>
+      <a href="#Qatar" onclick="johnOpella(this)" >Qatar</a>
+      <a href="#Romania" onclick="johnOpella(this)" >Romania</a>
+      <a href="#Russia" onclick="johnOpella(this)" >Russia</a>
+      <a href="#Rwanda" onclick="johnOpella(this)" >Rwanda</a>
+      <a href="#Samoa" onclick="johnOpella(this)" >Samoa</a>
+      <a href="#Saudi Arabia" onclick="johnOpella(this)" >Saudi Arabia</a>
+      <a href="#Senegal" onclick="johnOpella(this)" >Senegal</a>
+      <a href="#Serbia" onclick="johnOpella(this)" >Serbia</a>
+      <a href="#Singapore" onclick="johnOpella(this)" >Singapore</a>
+      <a href="#Slovakia" onclick="johnOpella(this)" >Slovakia</a>
+      <a href="#Slovenia" onclick="johnOpella(this)" >Slovenia</a>
+      <a href="#Somalia" onclick="johnOpella(this)" >Somalia</a>
+      <a href="#South Africa" onclick="johnOpella(this)" >South Africa</a>
+      <a href="#South Korea" onclick="johnOpella(this)" >South Korea</a>
+      <a href="#South Sudan" onclick="johnOpella(this)" >South Sudan</a>
+      <a href="#Spain" onclick="johnOpella(this)" >Spain</a>
+      <a href="#Sri Lanka" onclick="johnOpella(this)" >Sri Lanka</a>
+      <a href="#Sudan" onclick="johnOpella(this)" >Sudan</a>
+      <a href="#Suriname" onclick="johnOpella(this)" >Suriname</a>
+      <a href="#Sweden" onclick="johnOpella(this)" >Sweden</a>
+      <a href="#Switzerland" onclick="johnOpella(this)" >Switzerland</a>
+      <a href="#Taiwan" onclick="johnOpella(this)" >Taiwan</a>
+      <a href="#Tajikistan" onclick="johnOpella(this)" >Tajikistan</a>
+      <a href="#Tanzania" onclick="johnOpella(this)" >Tanzania</a>
+      <a href="#Thailand" onclick="johnOpella(this)" >Thailand</a>
+      <a href="#Trinidad and Tobago" onclick="johnOpella(this)" >Trinidad and Tobago</a>
+      <a href="#Tunisia" onclick="johnOpella(this)" >Tunisia</a>
+      <a href="#Turkey" onclick="johnOpella(this)" >Turkey</a>
+      <a href="#Turks and Caicos Islands" onclick="johnOpella(this)" >Turks and Caicos Islands</a>
+      <a href="#U.S. Virgin Islands" onclick="johnOpella(this)" >U.S. Virgin Islands</a>
+      <a href="#Uganda" onclick="johnOpella(this)" >Uganda</a>
+      <a href="#Ukraine" onclick="johnOpella(this)" >Ukraine</a>
+      <a href="#United Arab Emirates" onclick="johnOpella(this)" >United Arab Emirates</a>
+      <a href="#United Kingdom" onclick="johnOpella(this)" >United Kingdom</a>
+      <a href="#United States" onclick="johnOpella(this)" >United States</a>
+      <a href="#Uruguay" onclick="johnOpella(this)" >Uruguay</a>
+      <a href="#Uzbekistan" onclick="johnOpella(this)" >Uzbekistan</a>
+      <a href="#Venezuela" onclick="johnOpella(this)" >Venezuela</a>
+      <a href="#Vietnam" onclick="johnOpella(this)" >Vietnam</a>
+      <a href="#Zambia" onclick="johnOpella(this)" >Zambia</a>
+      <a href="#Zimbabwe" onclick="johnOpella(this)" >Zimbabwe</a>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="flex-container">
+      <div id = "viz1"></div>
+      <div id = "viz2"></div>  
+    </div>
+  <script>
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+    function johnOpella (element){
+      var countryName = element.innerText +'"';
+      var newName = element.innerText;
+            $.ajax({
+                type: "GET",
+                    url: "./data.csv",
+                    dataType: "text",
+                    data: {
+                }   ,
+                success: function(data) {
+                    var lines = processData(data, "test"); 
+                    var messi = lines.filter(function (lines) {return lines[3] === countryName;});
+                    var aguero = formatData(messi);
+                    var bob = formatDataViz(aguero);
+                    buildVizTwo(bob, newName);
+                    console.log(countryName, newName, messi, aguero, bob);
+                }
+            });
+        };  
+      function alpine(element){
+        var countryName = element.innerText +'"';
+        var newName = element.innerText;       
+            $.ajax({
+                type: "GET",
+                    url: "./data.csv",
+                    dataType: "text",
+                    data: {
+                }   ,
+                success: function(data) {
+                    var lines = processData(data, "test"); 
+                    var messi = lines.filter(function (lines) {return lines[3] === 'Austria"' || lines[3] === 'Belgium"' || lines[3] === 'Bulgaria"' || lines[3] === 'Croatia"' || lines[3] === 'Cyprus"' || lines[3] === 'Czechia"' || lines[3] === 'Denmark"' || lines[3] === 'Estonia"' || lines[3] === 'Finland"' || lines[3] === 'France"' || lines[3] === 'Germany"' || lines[3] === 'Greece"' || lines[3] === 'Hungary"' || lines[3] === 'Ireland"' || lines[3] === 'Italy"' || lines[3] === 'Latvia"' || lines[3] === 'Lithuania"' || lines[3] === 'Luxenbourg"' || lines[3] === 'Malta"' || lines[3] === 'Netherlands"' || lines[3] === 'Poland"' || lines[3] === 'Portugal"' || lines[3] === 'Romania"' || lines[3] === 'Slovakia"' || lines[3] === 'Slovenia"' || lines[3] === 'Spain"' || lines[3] === 'Sweeden"' || lines[3] === 'United Kingdom"';});
+                    var aguero = formatData(messi);
+                    var bob = formatDataViz(aguero);
+                    buildVizTwo(bob, newName);
+                }
+              });
+        };  
+        var barChart1 = new d3plus.BarChart().select("#viz1");
+        function buildVizTwo(objArray, newName) {
+              barChart1.data(objArray).title(newName).render();
+          }
+    function filterFunction() {
+      var input, filter, ul, li, a, i;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      div = document.getElementById("myDropdown");
+      a = div.getElementsByTagName("a");
+      for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          a[i].style.display = "";
+        } else {
+          a[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+          <script type="text/javascript">
+              $(document).ready(function() {
+                  $.ajax({
+                      type: "GET",
+                          url: "./data.csv",
+                          dataType: "text",
+                          data: {
+                      }   ,
+                      success: function(data) {
+                          var lines = processData(data, "test"); 
+                          var newData = formatData(lines);
+                          var dataForViz = formatDataViz(newData);
+                          buildViz(dataForViz);
+                          // var messi = lines.filter(function (lines) {return lines[3] === 'Austria"';});
+                          // var aguero = formatData(messi);
+                          // var bob = formatDataViz(aguero);                       
+                      }
+                  });
+              });  
+          function processData(allText, myText) {
+              var allTextLines = allText.split(/\r\n|\n/);   
+              var lines = [];        
+              for (var i=0; i<allTextLines.length; i++) {
+                  var data = allTextLines[i].split(',"');                
+                  var tarr = [];
+                  for (var j=0; j<data.length; j++) {
+                      tarr.push(data[j]);
+                  }
+                  lines.push(tarr);   
+              }
+              return lines;
+          } 
+          function formatData(lines) {
+              var newData = [];
+            var counts = {
+                "China": 0,
+                "United States": 0,
+                "European Union": 0,
+            }
+              var sample = lines[0];
+              var xaxisCat = sample[8];            
+              var responseCountry = sample[3];
+              for (var i=0; i<lines.length; i++){
+                  if (i==0) {continue}
+                  var bubbles = lines[i][8];
+                  if (!bubbles) {continue} 
+                  var bath = bubbles.slice(0, bubbles.length-1);
+                  var country = lines[i][3].slice(0, lines[i][3].length-1);
+                  var myObj= {
+                      category:bath,
+                      value:0,
+                      // changed 1 -> 0
+                      country:country,
+                  }
+                  if (bath!= "China"&& bath!= "United States"&& bath!= "European Union") {
+                  }
+                  country.fi
+                  counts[bath]++;
+                  // changed +=1 to ++
+                  newData.push(myObj);
+                  };   
+                  console.log(newData, counts, sample, xaxisCat, responseCountry, bubbles, bath, myObj);  
+              return counts;
+          }
+          function formatDataViz(newData) {
+              var objArray = [
+                      ]
+              for (var key in newData) {
+                  if (newData.hasOwnProperty(key)) {            
+                      objArray.push({id:key, x:key, y:newData[key]});
+                  }
+              }
+              return objArray;
+          }
+          function buildViz(objArray) {
+              new d3plus.BarChart().title("Total Data").select("#viz2")
+              .data(objArray)
+              .render();
+          }
+   </script>         
+</body>
+</html>
