@@ -288,12 +288,11 @@
                 }   ,
                 success: function(data) {
                     var lines = processData(data, "test"); 
-                    var messi = lines.filter(function (lines) {return lines[3] === countryName;});
-                    var aguero = formatData(messi);
-                    var bob = formatDataViz(aguero);
-                    buildVizTwo(bob, newName);
-//                     console.log(countryName, newName, messi, aguero, bob); 
-//                     hid this becasue I am using it to find an error in the code. 
+                    var filteredLines = lines.filter(function (lines) {return lines[3] === countryName;});
+                    var formatLines = formatData(filteredLines);
+                    var readyLines = formatDataViz(formatLines);
+                    buildVizTwo(readyLines, newName);
+                    console.log(countryName, newName, filteredLines, formatLines, readyLines);                     
                 }
             });
         };  
@@ -308,10 +307,10 @@
                 }   ,
                 success: function(data) {
                     var lines = processData(data, "test"); 
-                    var messi = lines.filter(function (lines) {return lines[3] === 'Austria"' || lines[3] === 'Belgium"' || lines[3] === 'Bulgaria"' || lines[3] === 'Croatia"' || lines[3] === 'Cyprus"' || lines[3] === 'Czechia"' || lines[3] === 'Denmark"' || lines[3] === 'Estonia"' || lines[3] === 'Finland"' || lines[3] === 'France"' || lines[3] === 'Germany"' || lines[3] === 'Greece"' || lines[3] === 'Hungary"' || lines[3] === 'Ireland"' || lines[3] === 'Italy"' || lines[3] === 'Latvia"' || lines[3] === 'Lithuania"' || lines[3] === 'Luxenbourg"' || lines[3] === 'Malta"' || lines[3] === 'Netherlands"' || lines[3] === 'Poland"' || lines[3] === 'Portugal"' || lines[3] === 'Romania"' || lines[3] === 'Slovakia"' || lines[3] === 'Slovenia"' || lines[3] === 'Spain"' || lines[3] === 'Sweeden"' || lines[3] === 'United Kingdom"';});
-                    var aguero = formatData(messi);
-                    var bob = formatDataViz(aguero);
-                    buildVizTwo(bob, newName);
+                    var filteredLines = lines.filter(function (lines) {return lines[3] === 'Austria"' || lines[3] === 'Belgium"' || lines[3] === 'Bulgaria"' || lines[3] === 'Croatia"' || lines[3] === 'Cyprus"' || lines[3] === 'Czechia"' || lines[3] === 'Denmark"' || lines[3] === 'Estonia"' || lines[3] === 'Finland"' || lines[3] === 'France"' || lines[3] === 'Germany"' || lines[3] === 'Greece"' || lines[3] === 'Hungary"' || lines[3] === 'Ireland"' || lines[3] === 'Italy"' || lines[3] === 'Latvia"' || lines[3] === 'Lithuania"' || lines[3] === 'Luxenbourg"' || lines[3] === 'Malta"' || lines[3] === 'Netherlands"' || lines[3] === 'Poland"' || lines[3] === 'Portugal"' || lines[3] === 'Romania"' || lines[3] === 'Slovakia"' || lines[3] === 'Slovenia"' || lines[3] === 'Spain"' || lines[3] === 'Sweeden"' || lines[3] === 'United Kingdom"';});
+                    var formatLines = formatData(filteredLines);
+                    var readyLines = formatDataViz(formatLines);
+                    buildVizTwo(readyLines, newName);
                 }
               });
         };  
@@ -348,10 +347,7 @@
                           var lines = processData(data, "test"); 
                           var newData = formatData(lines);
                           var dataForViz = formatDataViz(newData);
-                          buildViz(dataForViz);
-                          // var messi = lines.filter(function (lines) {return lines[3] === 'Austria"';});
-                          // var aguero = formatData(messi);
-                          // var bob = formatDataViz(aguero);                       
+                          buildViz(dataForViz);                     
                       }
                   });
               });  
@@ -380,24 +376,24 @@
               var responseCountry = sample[3];
               for (var i=0; i<lines.length; i++){
                   if (i==0) {continue}
-                  var bubbles = lines[i][8];
-                  if (!bubbles) {continue} 
-                  var bath = bubbles.slice(0, bubbles.length-1);
+                  var response = lines[i][8];
+                  if (!response) {continue} 
+                  var slicedResponse = response.slice(0, response.length-1);
                   var country = lines[i][3].slice(0, lines[i][3].length-1);
                   var myObj= {
-                      category:bath,
+                      category:slicedResponse,
                       value:0,
                       // changed 1 -> 0
                       country:country,
                   }
-                  if (bath!= "China"&& bath!= "United States"&& bath!= "European Union") {
+                  if (slicedResponse!= "China"&& slicedResponse!= "United States"&& slicedResponse!= "European Union") {
                   }
                   country.fi
-                  counts[bath]++;
+                  counts[slicedResponse]++;
                   // changed +=1 to ++
                   newData.push(myObj);
                   };   
-                  console.log(newData, counts, sample, xaxisCat, responseCountry, bubbles, bath, myObj);  
+                  console.log(newData, counts, sample, xaxisCat, responseCountry, response, slicedResponse, myObj);  
               return counts;
           }
           function formatDataViz(newData) {
