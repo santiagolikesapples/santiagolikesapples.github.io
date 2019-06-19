@@ -1,15 +1,27 @@
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Santiago's Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
        h1 {
       text-align: center;
     }  
+    .tooltip-table {
+        width: 100%;
+      }
+
+    .tooltip-table .data {
+      text-align: right;
+    }
+
+    .tooltip-footer {
+      opacity: 0.5;
+    }
     .flex-container {
       display: flex;
       height: 500px;
-      background-color: DodgerBlue;
+      background-color: #F5B041;
     } 
     .flex-container > div {
       background-color: #f1f1f1;
@@ -79,6 +91,16 @@
         </tbody>
     </table>
   <script src="https://d3plus.org/js/d3plus.v2.0.0-alpha.17.full.min.js"></script>
+  <div id ="bullets">
+    <ul>
+      <li>Data comes from a survey on the OEC website that asks "What is the world's top economic power?"</li>
+      <li>11,875 Responses</li>
+      <li>Collected between May 27, 2019 and June 05, 2019</li>
+    </ul>
+  </div>
+  <h1>
+    What is the world's top economic power? 
+   </h1>
   <div class="dropdown">
     <button onclick="myFunction()" class="dropbtn">Filter</button>
     <div id="myDropdown" class="dropdown-content">
@@ -244,28 +266,18 @@
       <a href="#Zimbabwe" onclick="johnOpella(this)" >Zimbabwe</a>
     </div>
   </div>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <h1>
-    What is the world's top economic power? 
-  </h1>
   <div class="flex-container">
       <div id = "viz1"></div>
       <div id = "viz2"></div>  
-    </div>
+  </div>
+  <h1>
+    Geographic maps of the percentage of each response based on country of origin. 
+  </h1>
+  <div class="flex-container">
+      <div id = "map1"></div>
+      <div id = "map2"></div> 
+      <div id = "map3"></div> 
+  </div>
   <script>
     function myFunction() {
       document.getElementById("myDropdown").classList.toggle("show");
@@ -280,13 +292,13 @@
                     data: {
                 }   ,
                 success: function(data) {
-                    var lines = processData(data, "test"); 
-                    var messi = lines.filter(function (lines) {return lines[3] === countryName;});
-                    var aguero = formatData(messi);
-                    var bob = formatDataViz(aguero);
-                    buildVizTwo(bob, newName);
-//                     console.log(countryName, newName, messi, aguero, bob); 
-//                     hid this becasue I am using it to find an error in the code. 
+                    var lines = processData(data, "test");
+                    console.log(countryName);
+                    var filteredLines = lines.filter(function (lines) {return lines[3] === countryName;});
+                    var formatLines = formatData(filteredLines);
+                    var readyLines = formatDataViz(formatLines);
+                    buildVizTwo(readyLines, newName);
+                    console.log(formatLines);
                 }
             });
         };  
@@ -301,10 +313,12 @@
                 }   ,
                 success: function(data) {
                     var lines = processData(data, "test"); 
-                    var messi = lines.filter(function (lines) {return lines[3] === 'Austria"' || lines[3] === 'Belgium"' || lines[3] === 'Bulgaria"' || lines[3] === 'Croatia"' || lines[3] === 'Cyprus"' || lines[3] === 'Czechia"' || lines[3] === 'Denmark"' || lines[3] === 'Estonia"' || lines[3] === 'Finland"' || lines[3] === 'France"' || lines[3] === 'Germany"' || lines[3] === 'Greece"' || lines[3] === 'Hungary"' || lines[3] === 'Ireland"' || lines[3] === 'Italy"' || lines[3] === 'Latvia"' || lines[3] === 'Lithuania"' || lines[3] === 'Luxenbourg"' || lines[3] === 'Malta"' || lines[3] === 'Netherlands"' || lines[3] === 'Poland"' || lines[3] === 'Portugal"' || lines[3] === 'Romania"' || lines[3] === 'Slovakia"' || lines[3] === 'Slovenia"' || lines[3] === 'Spain"' || lines[3] === 'Sweeden"' || lines[3] === 'United Kingdom"';});
-                    var aguero = formatData(messi);
-                    var bob = formatDataViz(aguero);
-                    buildVizTwo(bob, newName);
+                    console.log(countryName);
+                    var filteredLines = lines.filter(function (lines) {return lines[3] === 'Austria"' || lines[3] === 'Belgium"' || lines[3] === 'Bulgaria"' || lines[3] === 'Croatia"' || lines[3] === 'Cyprus"' || lines[3] === 'Czechia"' || lines[3] === 'Denmark"' || lines[3] === 'Estonia"' || lines[3] === 'Finland"' || lines[3] === 'France"' || lines[3] === 'Germany"' || lines[3] === 'Greece"' || lines[3] === 'Hungary"' || lines[3] === 'Ireland"' || lines[3] === 'Italy"' || lines[3] === 'Latvia"' || lines[3] === 'Lithuania"' || lines[3] === 'Luxenbourg"' || lines[3] === 'Malta"' || lines[3] === 'Netherlands"' || lines[3] === 'Poland"' || lines[3] === 'Portugal"' || lines[3] === 'Romania"' || lines[3] === 'Slovakia"' || lines[3] === 'Slovenia"' || lines[3] === 'Spain"' || lines[3] === 'Sweeden"' || lines[3] === 'United Kingdom"';});
+                    var formatLines = formatData(filteredLines);
+                    var readyLines = formatDataViz(formatLines);
+                    buildVizTwo(readyLines, newName);
+                    console.log(formatLines);
                 }
               });
         };  
@@ -330,24 +344,22 @@
   </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
           <script type="text/javascript">
-              $(document).ready(function() {
-                  $.ajax({
-                      type: "GET",
-                          url: "./data.csv",
-                          dataType: "text",
-                          data: {
-                      }   ,
-                      success: function(data) {
-                          var lines = processData(data, "test"); 
-                          var newData = formatData(lines);
-                          var dataForViz = formatDataViz(newData);
-                          buildViz(dataForViz);
-                          // var messi = lines.filter(function (lines) {return lines[3] === 'Austria"';});
-                          // var aguero = formatData(messi);
-                          // var bob = formatDataViz(aguero);                       
-                      }
-                  });
-              });  
+          var dataForViz;
+          $(document).ready(function() {
+              $.ajax({
+                  type: "GET",
+                      url: "./data.csv",
+                      dataType: "text",
+                      data: {
+                  }   ,
+                  success: function(data) {
+                      var lines = processData(data, "test"); 
+                      var newData = formatData(lines);
+                      dataForViz = formatDataViz(newData);
+                      buildViz(dataForViz);                      
+                  }
+              });
+          });  
           function processData(allText, myText) {
               var allTextLines = allText.split(/\r\n|\n/);   
               var lines = [];        
@@ -371,26 +383,24 @@
               var sample = lines[0];
               var xaxisCat = sample[8];            
               var responseCountry = sample[3];
+              
               for (var i=0; i<lines.length; i++){
-                  if (i==0) {continue}
-                  var bubbles = lines[i][8];
-                  if (!bubbles) {continue} 
-                  var bath = bubbles.slice(0, bubbles.length-1);
+                  if (lines[i][0]=='"Number"') {continue}
+                  var response = lines[i][8];
+                  if (!response) {continue} 
+                  var slicedResponse = response.slice(0, response.length-1);
                   var country = lines[i][3].slice(0, lines[i][3].length-1);
                   var myObj= {
-                      category:bath,
+                      category:slicedResponse,
                       value:0,
-                      // changed 1 -> 0
                       country:country,
                   }
-                  if (bath!= "China"&& bath!= "United States"&& bath!= "European Union") {
+                  if (slicedResponse!= "China"&& slicedResponse!= "United States"&& slicedResponse!= "European Union") {
                   }
                   country.fi
-                  counts[bath]++;
-                  // changed +=1 to ++
+                  counts[slicedResponse]++;
                   newData.push(myObj);
-                  };   
-                  console.log(newData, counts, sample, xaxisCat, responseCountry, bubbles, bath, myObj);  
+                  }; 
               return counts;
           }
           function formatDataViz(newData) {
@@ -408,6 +418,571 @@
               .data(objArray)
               .render();
           }
-   </script>         
+   </script>   
+   <script>
+      var popData = [{id: "004", name: "Afghanistan", china: .75, usa: .25, eu: 0, total: 4},
+                     {id: "008", name: "Albania", china: .40, usa: .50, eu: 1, total: 20},
+                     {id: "020", name: "Andorra", china: .67, usa: 0, eu: .3, total: 3}, 
+                     {id: "024", name: "Angola", china: .375, usa: .25, eu: .375, total: 8}, 
+                     {id: "028", name: "Antigua and Barbuda", china: 0, usa: .25, eu: 0, total: 1}, 
+                     {id: "032", name: "Argentina", china: .43, usa: .5, eu: .08, total: 328}, 
+                     {id: "051", name: "Armenia", china: .17, usa: .67, eu: .17, total: 6}, 
+                     {id: "533", name: "Aruba", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "036", name: "Australia", china: .52, usa: .375, eu: .10, total: 544}, 
+                     {id: "040", name: "Austria", china: .38, usa: .26, eu: .36, total: 53}, 
+                     {id: "031", name: "Azerbijan", china: .22, usa: .67, eu: .11, total: 9}, 
+                     {id: "048", name: "Bahrain", china: 0, usa: 1, eu: 0, total: 3}, 
+                     {id: "050", name: "Bangladesh", china: .45, usa: .45, eu: .09, total: 11}, 
+                     {id: "052", name: "Barbados", china: .50, usa: 0, eu: .50, total: 2}, 
+                     {id: "112", name: "Belarus", china: .41, usa: .47, eu: .12, total: 17}, 
+                     {id: "056", name: "Belgium", china: .37, usa: .42, eu: .21, total: 62}, 
+                     {id: "084", name: "Belize", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "060", name: "Bermuda", china: 1, usa: 0, eu: 0, total: 2}, 
+                     {id: "064", name: "Bolivar", china: .54, usa: .24, eu: .22, total: 68},  
+                     {id: "070", name: "Bosnia and Herzegovina", china: 0, usa: 1, eu: 0, total: 1},
+                     {id: "072", name: "Botswana", china: 1, usa: 0, eu: 0, total: 3},
+                     {id: "076", name: "Brazil", china: .35, usa: .58, eu: .07, total: 915}, 
+                     {id: "092", name: "British Virgin Islands", china: .0, usa: 0, eu: 1, total: 1}, 
+                     {id: "096", name: "Brunei", china: .0, usa: 0, eu: 1, total: 1}, 
+                     {id: "100", name: "Bulgaria", china: .43, usa: .29, eu: .29, total: 14}, 
+                     {id: "854", name: "Burkina Faso", china: .50, usa: .50, eu: 0, total: 2}, 
+                     {id: "108", name: "Burundi", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "116", name: "Cambodia", china: .33, usa: .56, eu: .11, total: 9}, 
+                     {id: "120", name: "Cameroon", china: .50, usa: 0, eu: .50, total: 2}, 
+                     {id: "124", name: "Canada", china: .36, usa: .53, eu: .10, total: 574}, 
+                     {id: "152", name: "Chile", china: .52, usa: .42, eu: .06, total: 219}, 
+                     {id: "156", name: "China", china: .47, usa: .46, eu: .08, total: 244}, 
+                     {id: "170", name: "Colombia", china: .41, usa: .49, eu: .10, total: 509}, 
+                     {id: "178", name: "Congo", china: .4, usa: .4, eu: .2, total: 5}, 
+                     {id: "188", name: "Costa Rica", china: .56, usa: .38, eu: .07, total: 61}, 
+                     {id: "191", name: "Croatia", china: .53, usa: .27, eu: .2, total: 15}, 
+                     {id: "192", name: "Cuba", china: .40, usa: .20, eu: .40, total: 5}, 
+                     {id: "531", name: "Curaçao", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "196", name: "Cyprus", china: 0, usa: 1, eu: 0, total: 1},
+                     {id: "203", name: "Czechia", china: .21, usa: .52, eu: .27, total: 33},
+                     {id: "208", name: "Denmark", china: .27, usa: .49, eu: .24, total: 67}, 
+                     {id: "214", name: "Dominican Republic", china: .52, usa: .25, eu: .07, total: 85}, 
+                     {id: "218", name: "Ecuador", china: .47, usa: .39, eu: .13, total: 175}, 
+                     {id: "818", name: "Egypt", china: .56, usa: .28, eu: .17, total: 18}, 
+                     {id: "222", name: "El Salvador", china: .47, usa: .39, eu: .14, total: 64}, 
+                     {id: "233", name: "Estonia", china: .43, usa: .57, eu: 0, total: 7}, 
+                     {id: "242", name: "Fiji", china: .40, usa: .20, eu: .40, total: 5}, 
+                     {id: "246", name: "Finland", china: .27, usa: .47, eu: .27, total: 15}, 
+                     {id: "250", name: "France", china: .41, usa: .34, eu: .25, total: 96}, 
+                     {id: "258", name: "French Polynesia", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "268", name: "Georgia", china: .29, usa: .57, eu: .14, total: 7}, 
+                     {id: "276", name: "Germany", china: .36, usa: .32, eu: .32, total: 388}, 
+                     {id: "288", name: "Ghana", china: .33, usa: .67, eu: 0, total: 6}, 
+                     {id: "300", name: "Greece", china: .24, usa: .41, eu: .35, total: 17}, 
+                     {id: "320", name: "Guatemala", china: .62, usa: .35, eu: .03, total: 34}, 
+                     {id: "328", name: "Guyan", china: .67, usa: .33, eu: 0, total: 3}, 
+                     {id: "332", name: "Haiti", china: .50, usa: .50, eu: 0, total: 2},  
+                     {id: "340", name: "Honduras", china: .57, usa: .30, eu: .13, total: 46},
+                     {id: "344", name: "Hong Kong", china: .43, usa: .47, eu: .10, total: 49},
+                     {id: "348", name: "Hungary", china: .13, usa: .58, eu: .29, total: 31}, 
+                     {id: "356", name: "India", china: .29, usa: .60, eu: .11, total: 227}, 
+                     {id: "360", name: "Indonesia", china: .37, usa: .61, eu: .03, total: 38}, 
+                     {id: "364", name: "Iran", china: .55, usa: .40, eu: .04, total: 47}, 
+                     {id: "368", name: "Iraq", china: .71, usa: .29, eu: 0, total: 7}, 
+                     {id: "372", name: "Ireland", china: .28, usa: .50, eu: .22, total: 18}, 
+                     {id: "376", name: "Israel", china: .1, usa: .85, eu: .05, total: 20}, 
+                     {id: "380", name: "Italy", china: .28, usa: .49, eu: .23, total: 131}, 
+                     {id: "384", name: "Ivory Coast", china: .50, usa: .50, eu: 0, total: 4}, 
+                     {id: "388", name: "Jamaica", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "392", name: "Japan", china: .23, usa: .68, eu: .09, total: 100}, 
+                     {id: "400", name: "Jordan", china: 1, usa: 0, eu: 0, total: 3}, 
+                     {id: "398", name: "Kazakhstan", china: .50, usa: .50, eu: 0, total: 20}, 
+                     {id: "404", name: "Kenya", china: .43, usa: .50, eu: .07, total: 28}, 
+                     {id: "414", name: "Kuwait", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "417", name: "Kyrgyzstan", china: .50, usa: .25, eu: .25, total: 4}, 
+                     {id: "418", name: "Laos", china: 1, usa: .25, eu: 0, total: 1},  
+                     {id: "428", name: "Latvia", china: .33, usa: .50, eu: .17, total: 6},
+                     {id: "422", name: "Lebanon", china: .33, usa: .58, eu: .08, total: 12},
+                     {id: "434", name: "Libya", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "438", name: "Liechtenstein", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "440", name: "Lithuania", china: .44, usa: .38, eu: .19, total: 16}, 
+                     {id: "442", name: "Luxembourg", china: .20, usa: .80, eu: 0, total: 5}, 
+                     {id: "446", name: "Macao", china: .60, usa: .40, eu: 0, total: 5}, 
+                     {id: "807", name: "Macedonia", china: .33, usa: .67, eu: 0, total: 3}, 
+                     {id: "450", name: "Madagascar", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "454", name: "Malawi", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "458", name: "Malaysia", china: .45, usa: .47, eu: .08, total: 38}, 
+                     {id: "466", name: "Mali", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "470", name: "Malta", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "480", name: "Mauritius", china: .40, usa: .50, eu: .10, total: 10}, 
+                     {id: "484", name: "Mexico", china: .47, usa: .4, eu: .13, total: 1028}, 
+                     {id: "498", name: "Moldova", china: .25, usa: .25, eu: .50, total: 4}, 
+                     {id: "492", name: "Monaco", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "496", name: "Mongolia", china: .38, usa: .54, eu: .08, total: 13}, 
+                     {id: "499", name: "Montenegro", china: 0, usa: 0, eu: 1, total: 1},  
+                     {id: "504", name: "Morocco", china: .50, usa: .44, eu: .06, total: 16},
+                     {id: "508", name: "Mozambique", china: .75, usa: .25, eu: 0, total: 4},
+                     {id: "104", name: "Myanmar [Burma]", china: .67, usa: .33, eu: 0, total: 3}, 
+                     {id: "516", name: "Nambia", china: 1, usa: 0, eu: 0, total: 3}, 
+                     {id: "524", name: "Nepal", china: .33, usa: .67, eu: 0, total: 9}, 
+                     {id: "528", name: "Netherlands", china: .35, usa: .31, eu: .34, total: 367}, 
+                     {id: "540", name: "New Caledonia", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "554", name: "New Zealand", china: .55, usa: .38, eu: .07, total: 42}, 
+                     {id: "558", name: "Nicarawa", china: .64, usa: .38, eu: 0, total: 14}, 
+                     {id: "562", name: "Niger", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "566", name: "Nigeria", china: .33, usa: .61, eu: .06, total: 18}, 
+                     {id: "578", name: "Norway", china: .31, usa: .52, eu: .17, total: 29}, 
+                     {id: "512", name: "Oman", china: .31, usa: .62, eu: .08, total: 13}, 
+                     {id: "586", name: "Pakistan", china: .64, usa: .30, eu: .06, total: 69}, 
+                     {id: "591", name: "Panama", china: .57, usa: .40, eu: .03, total: 37}, 
+                     {id: "598", name: "Papua New Guinea", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "600", name: "Paraguay", china: .54, usa: .42, eu: .04, total: 24}, 
+                     {id: "604", name: "Peru", china: .52, usa: .39, eu: .09, total: 323}, 
+                     {id: "608", name: "Philippines", china: .34, usa: .57, eu: .09, total: 35},  
+                     {id: "616", name: "Poland", china: .41, usa: .37, eu: .22, total: 97},
+                     {id: "620", name: "Portugal", china: .37, usa: .37, eu: .26, total: 97},
+                     {id: "630", name: "Puerto Rico", china: .33, usa: .56, eu: .11, total: 9}, 
+                     {id: "634", name: "Quatar", china: .25, usa: .50, eu: .25, total: 4}, 
+                     {id: "642", name: "Romania", china: .35, usa: .41, eu: .24, total: 29}, 
+                     {id: "643", name: "Russia", china: .44, usa: .41, eu: .15, total: 276}, 
+                     {id: "646", name: "Rwanda", china: .14, usa: .71, eu: .14, total: 7}, 
+                     {id: "882", name: "Samoa", china: 1, usa: 0, eu: 0, total: 2}, 
+                     {id: "682", name: "Saudi Arabia", china: .30, usa: .60, eu: .10, total: 10}, 
+                     {id: "686", name: "Senegal", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "688", name: "Serbia", china: .20, usa: .50, eu: .30, total: 10}, 
+                     {id: "702", name: "Singapore", china: .39, usa: .56, eu: .05, total: 80}, 
+                     {id: "703", name: "Slovakia", china: .22, usa: .44, eu: .33, total: 9}, 
+                     {id: "705", name: "Slovenia", china: .33, usa: 0, eu: .67, total: 3}, 
+                     {id: "706", name: "Somalia", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "710", name: "South Africa", china: .31, usa: .8, eu: .21, total: 29}, 
+                     {id: "410", name: "South Korea", china: .17, usa: .75, eu: .08, total: 75},
+                     {id: "728", name: "South Sudan", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "724", name: "Spain", china: .37, usa: .43, eu: .20, total: 366}, 
+                     {id: "144", name: "Sri Lanka", china: .74, usa: .16, eu: .10, total: 19}, 
+                     {id: "729", name: "Sudan", china: .50, usa: .50, eu: 0, total: 2}, 
+                     {id: "740", name: "Suriname", china: .50, usa: 0, eu: .50, total: 2}, 
+                     {id: "752", name: "Sweeden", china: .44, usa: .38, eu: .18, total: 63}, 
+                     {id: "756", name: "Switzerland", china: .39, usa: .33, eu: .28, total: 61}, 
+                     {id: "158", name: "Taiwan", china: .21, usa: .73, eu: .06, total: 52}, 
+                     {id: "762", name: "Tajkistan", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "834", name: "Tanzania", china: .33, usa: .67, eu: 0, total: 9}, 
+                     {id: "764", name: "Thailand", china: .50, usa: .42, eu: .08, total: 26}, 
+                     {id: "780", name: "Trinidad and Tobago", china: .5, usa: .42, eu: .08, total: 12}, 
+                     {id: "788", name: "Tunisia", china: .38, usa: .38, eu: .25, total: 8}, 
+                     {id: "792", name: "Turkey", china: .47, usa: .40, eu: .13, total: 176}, 
+                     {id: "796", name: "Turks and Caicos Islands", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "850", name: "U.S. Virgin Islands", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "800", name: "Uganda", china: .67, usa: 0, eu: .33, total: 3}, 
+                     {id: "804", name: "Ukraine", china: .38, usa: .45, eu: .17, total: 107}, 
+                     {id: "784", name: "United Arab Emirates", china: .43, usa: .50, eu: .07, total: 14}, 
+                     {id: "826", name: "United Kingdom", china: .33, usa: .47, eu: .2, total: 411}, 
+                     {id: "840", name: "United States", china: .33, usa: .58, eu: .08, total: 1874},   
+                     {id: "858", name: "Uruguay", china: .41, usa: .44, eu: .15, total: 27}, 
+                     {id: "860", name: "Uzbekistan", china: .57, usa: .29, eu: .14, total: 14}, 
+                     {id: "862", name: "Venezuela", china: .43, usa: .47, eu: .1, total: 87}, 
+                     {id: "704", name: "Vietnam", china: .21, usa: .72, eu: .06, total: 47}, 
+                     {id: "894", name: "Zambia", china: .75, usa: 0, eu: .25, total: 4}, 
+                     {id: "716", name: "Zimbabwe", china: .25, usa: .75, eu: 0, total: 4},                                     
+                     ];
+      var chart = new d3plus.Geomap()
+          .select("#map1")
+          .data(popData)
+          .colorScale("china")
+          .colorScaleConfig({scale: "jenks"})
+          .title("China")
+          .topojson("world-110m.json")
+          .tooltipConfig({
+              body: function(d) {
+                var table = "<table class='tooltip-table'>";
+                table += "<tr><td class='title'>Percentage:</td><td class='data'>" + d.china + "</td></tr>";
+                table += "<tr><td class='title'>Total Responses:</td><td class='data'>" + d.total + "</td></tr>";
+                table += "</table>";
+                return table;
+              },
+              footer: function(d) {
+                return "<sub class='tooltip-footer'>Percentage is based on a scale from (0-1)</sub>";
+              },
+              title: function(d) {
+                var txt = d.name;
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();;
+              }
+            })
+            
+          .fitFilter(function(d) {
+            return ["tie"].indexOf(d.id) < 0;
+          });
+           chart.render();
+  </script> 
+   <script>
+      var popData = [{id: "004", name: "Afghanistan", china: .75, usa: .25, eu: 0, total: 4},
+                     {id: "008", name: "Albania", china: .4, usa: .5, eu: 1, total: 20},
+                     {id: "020", name: "Andorra", china: .67, usa: 0, eu: .3, total: 3}, 
+                     {id: "024", name: "Angola", china: .375, usa: .25, eu: .375, total: 8}, 
+                     {id: "028", name: "Antigua and Barbuda", china: 0, usa: .25, eu: 0, total: 1}, 
+                     {id: "032", name: "Argentina", china: .43, usa: .5, eu: .08, total: 328}, 
+                     {id: "051", name: "Armenia", china: .17, usa: .67, eu: .17, total: 6}, 
+                     {id: "533", name: "Aruba", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "036", name: "Australia", china: .52, usa: .375, eu: .1, total: 544}, 
+                     {id: "040", name: "Austria", china: .38, usa: .26, eu: .36, total: 53}, 
+                     {id: "031", name: "Azerbijan", china: .22, usa: .67, eu: .11, total: 9}, 
+                     {id: "048", name: "Bahrain", china: 0, usa: 1, eu: 0, total: 3}, 
+                     {id: "050", name: "Bangladesh", china: .45, usa: .45, eu: .09, total: 11}, 
+                     {id: "052", name: "Barbados", china: .5, usa: 0, eu: .5, total: 2}, 
+                     {id: "112", name: "Belarus", china: .41, usa: .47, eu: .12, total: 17}, 
+                     {id: "056", name: "Belgium", china: .37, usa: .42, eu: .21, total: 62}, 
+                     {id: "084", name: "Belize", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "060", name: "Bermuda", china: 1, usa: 0, eu: 0, total: 2}, 
+                     {id: "064", name: "Bolivar", china: .54, usa: .24, eu: .22, total: 68},  
+                     {id: "070", name: "Bosnia and Herzegovina", china: 0, usa: 1, eu: 0, total: 1},
+                     {id: "072", name: "Botswana", china: 1, usa: 0, eu: 0, total: 3},
+                     {id: "076", name: "Brazil", china: .35, usa: .58, eu: .07, total: 915}, 
+                     {id: "092", name: "British Virgin Islands", china: .0, usa: 0, eu: 1, total: 1}, 
+                     {id: "096", name: "Brunei", china: .0, usa: 0, eu: 1, total: 1}, 
+                     {id: "100", name: "Bulgaria", china: .43, usa: .29, eu: .29, total: 14}, 
+                     {id: "854", name: "Burkina Faso", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "108", name: "Burundi", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "116", name: "Cambodia", china: .33, usa: .56, eu: .11, total: 9}, 
+                     {id: "120", name: "Cameroon", china: .5, usa: 0, eu: .5, total: 2}, 
+                     {id: "124", name: "Canada", china: .36, usa: .53, eu: .1, total: 574}, 
+                     {id: "152", name: "Chile", china: .52, usa: .42, eu: .06, total: 219}, 
+                     {id: "156", name: "China", china: .47, usa: .46, eu: .08, total: 244}, 
+                     {id: "170", name: "Colombia", china: .41, usa: .49, eu: .1, total: 509}, 
+                     {id: "178", name: "Congo", china: .4, usa: .4, eu: .2, total: 5}, 
+                     {id: "188", name: "Costa Rica", china: .56, usa: .38, eu: .07, total: 61}, 
+                     {id: "191", name: "Croatia", china: .53, usa: .27, eu: .2, total: 15}, 
+                     {id: "192", name: "Cuba", china: .4, usa: .2, eu: .4, total: 5}, 
+                     {id: "531", name: "Curaçao", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "196", name: "Cyprus", china: 0, usa: 1, eu: 0, total: 1},
+                     {id: "203", name: "Czechia", china: .21, usa: .52, eu: .27, total: 33},
+                     {id: "208", name: "Denmark", china: .27, usa: .49, eu: .24, total: 67}, 
+                     {id: "214", name: "Dominican Republic", china: .52, usa: .25, eu: .07, total: 85}, 
+                     {id: "218", name: "Ecuador", china: .47, usa: .39, eu: .13, total: 175}, 
+                     {id: "818", name: "Egypt", china: .56, usa: .28, eu: .17, total: 18}, 
+                     {id: "222", name: "El Salvador", china: .47, usa: .39, eu: .14, total: 64}, 
+                     {id: "233", name: "Estonia", china: .43, usa: .57, eu: 0, total: 7}, 
+                     {id: "242", name: "Fiji", china: .4, usa: .2, eu: .4, total: 5}, 
+                     {id: "246", name: "Finland", china: .27, usa: .47, eu: .27, total: 15}, 
+                     {id: "250", name: "France", china: .41, usa: .34, eu: .25, total: 96}, 
+                     {id: "258", name: "French Polynesia", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "268", name: "Georgia", china: .29, usa: .57, eu: .14, total: 7}, 
+                     {id: "276", name: "Germany", china: .36, usa: .32, eu: .32, total: 388}, 
+                     {id: "288", name: "Ghana", china: .33, usa: .67, eu: 0, total: 6}, 
+                     {id: "300", name: "Greece", china: .24, usa: .41, eu: .35, total: 17}, 
+                     {id: "320", name: "Guatemala", china: .62, usa: .35, eu: .03, total: 34}, 
+                     {id: "328", name: "Guyan", china: .67, usa: .33, eu: 0, total: 3}, 
+                     {id: "332", name: "Haiti", china: .5, usa: .5, eu: 0, total: 2},  
+                     {id: "340", name: "Honduras", china: .57, usa: .3, eu: .13, total: 46},
+                     {id: "344", name: "Hong Kong", china: .43, usa: .47, eu: .1, total: 49},
+                     {id: "348", name: "Hungary", china: .13, usa: .58, eu: .29, total: 31}, 
+                     {id: "356", name: "India", china: .29, usa: .60, eu: .11, total: 227}, 
+                     {id: "360", name: "Indonesia", china: .37, usa: .61, eu: .03, total: 38}, 
+                     {id: "364", name: "Iran", china: .55, usa: .4, eu: .04, total: 47}, 
+                     {id: "368", name: "Iraq", china: .71, usa: .29, eu: 0, total: 7}, 
+                     {id: "372", name: "Ireland", china: .28, usa: .5, eu: .22, total: 18}, 
+                     {id: "376", name: "Israel", china: .1, usa: .85, eu: .05, total: 20}, 
+                     {id: "380", name: "Italy", china: .28, usa: .49, eu: .23, total: 131}, 
+                     {id: "384", name: "Ivory Coast", china: .5, usa: .5, eu: 0, total: 4}, 
+                     {id: "388", name: "Jamaica", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "392", name: "Japan", china: .23, usa: .68, eu: .09, total: 100}, 
+                     {id: "400", name: "Jordan", china: 1, usa: 0, eu: 0, total: 3}, 
+                     {id: "398", name: "Kazakhstan", china: .5, usa: .5, eu: 0, total: 20}, 
+                     {id: "404", name: "Kenya", china: .43, usa: .5, eu: .07, total: 28}, 
+                     {id: "414", name: "Kuwait", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "417", name: "Kyrgyzstan", china: .5, usa: .25, eu: .25, total: 4}, 
+                     {id: "418", name: "Laos", china: 1, usa: .25, eu: 0, total: 1},  
+                     {id: "428", name: "Latvia", china: .33, usa: .5, eu: .17, total: 6},
+                     {id: "422", name: "Lebanon", china: .33, usa: .58, eu: .08, total: 12},
+                     {id: "434", name: "Libya", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "438", name: "Liechtenstein", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "440", name: "Lithuania", china: .44, usa: .38, eu: .19, total: 16}, 
+                     {id: "442", name: "Luxembourg", china: .2, usa: .8, eu: 0, total: 5}, 
+                     {id: "446", name: "Macao", china: .6, usa: .4, eu: 0, total: 5}, 
+                     {id: "807", name: "Macedonia", china: .33, usa: .67, eu: 0, total: 3}, 
+                     {id: "450", name: "Madagascar", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "454", name: "Malawi", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "458", name: "Malaysia", china: .45, usa: .47, eu: .08, total: 38}, 
+                     {id: "466", name: "Mali", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "470", name: "Malta", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "480", name: "Mauritius", china: .4, usa: .5, eu: .1, total: 10}, 
+                     {id: "484", name: "Mexico", china: .47, usa: .4, eu: .13, total: 1028}, 
+                     {id: "498", name: "Moldova", china: .25, usa: .25, eu: .5, total: 4}, 
+                     {id: "492", name: "Monaco", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "496", name: "Mongolia", china: .38, usa: .54, eu: .08, total: 13}, 
+                     {id: "499", name: "Montenegro", china: 0, usa: 0, eu: 1, total: 1},  
+                     {id: "504", name: "Morocco", china: .5, usa: .44, eu: .06, total: 16},
+                     {id: "508", name: "Mozambique", china: .75, usa: .25, eu: 0, total: 4},
+                     {id: "104", name: "Myanmar [Burma]", china: .67, usa: .33, eu: 0, total: 3}, 
+                     {id: "516", name: "Nambia", china: 1, usa: 0, eu: 0, total: 3}, 
+                     {id: "524", name: "Nepal", china: .33, usa: .67, eu: 0, total: 9}, 
+                     {id: "528", name: "Netherlands", china: .35, usa: .31, eu: .34, total: 367}, 
+                     {id: "540", name: "New Caledonia", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "554", name: "New Zealand", china: .55, usa: .38, eu: .07, total: 42}, 
+                     {id: "558", name: "Nicarawa", china: .64, usa: .38, eu: 0, total: 14}, 
+                     {id: "562", name: "Niger", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "566", name: "Nigeria", china: .33, usa: .61, eu: .06, total: 18}, 
+                     {id: "578", name: "Norway", china: .31, usa: .52, eu: .17, total: 29}, 
+                     {id: "512", name: "Oman", china: .31, usa: .62, eu: .08, total: 13}, 
+                     {id: "586", name: "Pakistan", china: .64, usa: .3, eu: .06, total: 69}, 
+                     {id: "591", name: "Panama", china: .57, usa: .4, eu: .03, total: 37}, 
+                     {id: "598", name: "Papua New Guinea", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "600", name: "Paraguay", china: .54, usa: .42, eu: .04, total: 24}, 
+                     {id: "604", name: "Peru", china: .52, usa: .39, eu: .09, total: 323}, 
+                     {id: "608", name: "Philippines", china: .34, usa: .57, eu: .09, total: 35},  
+                     {id: "616", name: "Poland", china: .41, usa: .37, eu: .22, total: 97},
+                     {id: "620", name: "Portugal", china: .37, usa: .37, eu: .26, total: 97},
+                     {id: "630", name: "Puerto Rico", china: .33, usa: .56, eu: .11, total: 9}, 
+                     {id: "634", name: "Quatar", china: .25, usa: .5, eu: .25, total: 4}, 
+                     {id: "642", name: "Romania", china: .35, usa: .41, eu: .24, total: 29}, 
+                     {id: "643", name: "Russia", china: .44, usa: .41, eu: .15, total: 276}, 
+                     {id: "646", name: "Rwanda", china: .14, usa: .71, eu: .14, total: 7}, 
+                     {id: "882", name: "Samoa", china: 1, usa: 0, eu: 0, total: 2}, 
+                     {id: "682", name: "Saudi Arabia", china: .3, usa: .6, eu: 1, total: 10}, 
+                     {id: "686", name: "Senegal", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "688", name: "Serbia", china: .2, usa: .5, eu: .3, total: 10}, 
+                     {id: "702", name: "Singapore", china: .39, usa: .56, eu: .05, total: 80}, 
+                     {id: "703", name: "Slovakia", china: .22, usa: .44, eu: .33, total: 9}, 
+                     {id: "705", name: "Slovenia", china: .33, usa: 0, eu: .67, total: 3}, 
+                     {id: "706", name: "Somalia", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "710", name: "South Africa", china: .31, usa: .8, eu: .21, total: 29}, 
+                     {id: "410", name: "South Korea", china: .17, usa: .75, eu: .08, total: 75},
+                     {id: "728", name: "South Sudan", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "724", name: "Spain", china: .37, usa: .43, eu: .2, total: 366}, 
+                     {id: "144", name: "Sri Lanka", china: .74, usa: .16, eu: .1, total: 19}, 
+                     {id: "729", name: "Sudan", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "740", name: "Suriname", china: .5, usa: 0, eu: .5, total: 2}, 
+                     {id: "752", name: "Sweeden", china: .44, usa: .38, eu: .18, total: 63}, 
+                     {id: "756", name: "Switzerland", china: .39, usa: .33, eu: .28, total: 61}, 
+                     {id: "158", name: "Taiwan", china: .21, usa: .73, eu: .06, total: 52}, 
+                     {id: "762", name: "Tajkistan", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "834", name: "Tanzania", china: .33, usa: .67, eu: 0, total: 9}, 
+                     {id: "764", name: "Thailand", china: .5, usa: .42, eu: .08, total: 26}, 
+                     {id: "780", name: "Trinidad and Tobago", china: .5, usa: .42, eu: .08, total: 12}, 
+                     {id: "788", name: "Tunisia", china: .38, usa: .38, eu: .25, total: 8}, 
+                     {id: "792", name: "Turkey", china: .47, usa: .4, eu: .13, total: 176}, 
+                     {id: "796", name: "Turks and Caicos Islands", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "850", name: "U.S. Virgin Islands", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "800", name: "Uganda", china: .67, usa: 0, eu: .33, total: 3}, 
+                     {id: "804", name: "Ukraine", china: .38, usa: .45, eu: .17, total: 107}, 
+                     {id: "784", name: "United Arab Emirates", china: .43, usa: .5, eu: .07, total: 14}, 
+                     {id: "826", name: "United Kingdom", china: .33, usa: .47, eu: .2, total: 411}, 
+                     {id: "840", name: "United States", china: .33, usa: .58, eu: .08, total: 1874},   
+                     {id: "858", name: "Uruguay", china: .41, usa: .44, eu: .15, total: 27}, 
+                     {id: "860", name: "Uzbekistan", china: .57, usa: .29, eu: .14, total: 14}, 
+                     {id: "862", name: "Venezuela", china: .43, usa: .47, eu: .1, total: 87}, 
+                     {id: "704", name: "Vietnam", china: .21, usa: .72, eu: .06, total: 47}, 
+                     {id: "894", name: "Zambia", china: .75, usa: 0, eu: .25, total: 4}, 
+                     {id: "716", name: "Zimbabwe", china: .25, usa: .75, eu: 0, total: 4},                                     
+                     ];
+      var chart = new d3plus.Geomap()
+          .select("#map2")
+          .data(popData)
+          .colorScale("usa")
+          .colorScaleConfig({scale: "jenks"})
+          .title("USA")
+          .topojson("world-110m.json")
+          .tooltipConfig({
+              body: function(d) {
+                var table = "<table class='tooltip-table'>";
+                table += "<tr><td class='title'>Percentage:</td><td class='data'>" + d.usa + "</td></tr>";
+                table += "<tr><td class='title'>Total Responses:</td><td class='data'>" + d.total + "</td></tr>";
+                table += "</table>";
+                return table;
+              },
+              footer: function(d) {
+                return "<sub class='tooltip-footer'>Percentage is based on a scale from (0-1)</sub>";
+              },
+              title: function(d) {
+                var txt = d.name;
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();;
+              }
+            })
+          .fitFilter(function(d) {
+      return ["tie"].indexOf(d.id) < 0;
+          });
+      chart.render();
+  </script> 
+  <script>
+      var popData = [{id: "004", name: "Afghanistan", china: .75, usa: .25, eu: 0, total: 4},
+                     {id: "008", name: "Albania", china: .4, usa: .5, eu: .10, total: 20},
+                     {id: "020", name: "Andorra", china: .67, usa: 0, eu: .3, total: 3}, 
+                     {id: "024", name: "Angola", china: .375, usa: .25, eu: .375, total: 8}, 
+                     {id: "028", name: "Antigua and Barbuda", china: 0, usa: .25, eu: 0, total: 1}, 
+                     {id: "032", name: "Argentina", china: .43, usa: .5, eu: .08, total: 328}, 
+                     {id: "051", name: "Armenia", china: .17, usa: .67, eu: .17, total: 6}, 
+                     {id: "533", name: "Aruba", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "036", name: "Australia", china: .52, usa: .375, eu: .1, total: 544}, 
+                     {id: "040", name: "Austria", china: .38, usa: .26, eu: .36, total: 53}, 
+                     {id: "031", name: "Azerbijan", china: .22, usa: .67, eu: .11, total: 9}, 
+                     {id: "048", name: "Bahrain", china: 0, usa: 1, eu: 0, total: 3}, 
+                     {id: "050", name: "Bangladesh", china: .45, usa: .45, eu: .09, total: 11}, 
+                     {id: "052", name: "Barbados", china: .5, usa: 0, eu: .5, total: 2}, 
+                     {id: "112", name: "Belarus", china: .41, usa: .47, eu: .12, total: 17}, 
+                     {id: "056", name: "Belgium", china: .37, usa: .42, eu: .21, total: 62}, 
+                     {id: "084", name: "Belize", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "060", name: "Bermuda", china: 1, usa: 0, eu: 0, total: 2}, 
+                     {id: "064", name: "Bolivar", china: .54, usa: .24, eu: .22, total: 68},  
+                     {id: "070", name: "Bosnia and Herzegovina", china: 0, usa: 1, eu: 0, total: 1},
+                     {id: "072", name: "Botswana", china: 1, usa: 0, eu: 0, total: 3},
+                     {id: "076", name: "Brazil", china: .35, usa: .58, eu: .07, total: 915}, 
+                     {id: "092", name: "British Virgin Islands", china: .0, usa: 0, eu: 1, total: 1}, 
+                     {id: "096", name: "Brunei", china: .0, usa: 0, eu: 1, total: 1}, 
+                     {id: "100", name: "Bulgaria", china: .43, usa: .29, eu: .29, total: 14}, 
+                     {id: "854", name: "Burkina Faso", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "108", name: "Burundi", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "116", name: "Cambodia", china: .33, usa: .56, eu: .11, total: 9}, 
+                     {id: "120", name: "Cameroon", china: .5, usa: 0, eu: .5, total: 2}, 
+                     {id: "124", name: "Canada", china: .36, usa: .53, eu: .1, total: 574}, 
+                     {id: "152", name: "Chile", china: .52, usa: .42, eu: .06, total: 219}, 
+                     {id: "156", name: "China", china: .47, usa: .46, eu: .08, total: 244}, 
+                     {id: "170", name: "Colombia", china: .41, usa: .49, eu: .1, total: 509}, 
+                     {id: "178", name: "Congo", china: .4, usa: .4, eu: .2, total: 5}, 
+                     {id: "188", name: "Costa Rica", china: .56, usa: .38, eu: .07, total: 61}, 
+                     {id: "191", name: "Croatia", china: .53, usa: .27, eu: .2, total: 15}, 
+                     {id: "192", name: "Cuba", china: .4, usa: .2, eu: .4, total: 5}, 
+                     {id: "531", name: "Curaçao", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "196", name: "Cyprus", china: 0, usa: 1, eu: 0, total: 1},
+                     {id: "203", name: "Czechia", china: .21, usa: .52, eu: .27, total: 33},
+                     {id: "208", name: "Denmark", china: .27, usa: .49, eu: .24, total: 67}, 
+                     {id: "214", name: "Dominican Republic", china: .52, usa: .25, eu: .07, total: 85}, 
+                     {id: "218", name: "Ecuador", china: .47, usa: .39, eu: .13, total: 175}, 
+                     {id: "818", name: "Egypt", china: .56, usa: .28, eu: .17, total: 18}, 
+                     {id: "222", name: "El Salvador", china: .47, usa: .39, eu: .14, total: 64}, 
+                     {id: "233", name: "Estonia", china: .43, usa: .57, eu: 0, total: 7}, 
+                     {id: "242", name: "Fiji", china: .4, usa: .2, eu: .4, total: 5}, 
+                     {id: "246", name: "Finland", china: .27, usa: .47, eu: .27, total: 15}, 
+                     {id: "250", name: "France", china: .41, usa: .34, eu: .25, total: 96}, 
+                     {id: "258", name: "French Polynesia", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "268", name: "Georgia", china: .29, usa: .57, eu: .14, total: 7}, 
+                     {id: "276", name: "Germany", china: .36, usa: .32, eu: .32, total: 388}, 
+                     {id: "288", name: "Ghana", china: .33, usa: .67, eu: 0, total: 6}, 
+                     {id: "300", name: "Greece", china: .24, usa: .41, eu: .35, total: 17}, 
+                     {id: "320", name: "Guatemala", china: .62, usa: .35, eu: .03, total: 34}, 
+                     {id: "328", name: "Guyan", china: .67, usa: .33, eu: 0, total: 3}, 
+                     {id: "332", name: "Haiti", china: .5, usa: .5, eu: 0, total: 2},  
+                     {id: "340", name: "Honduras", china: .57, usa: .3, eu: .13, total: 46},
+                     {id: "344", name: "Hong Kong", china: .43, usa: .47, eu: .1, total: 49},
+                     {id: "348", name: "Hungary", china: .13, usa: .58, eu: .29, total: 31}, 
+                     {id: "356", name: "India", china: .29, usa: .60, eu: .11, total: 227}, 
+                     {id: "360", name: "Indonesia", china: .37, usa: .61, eu: .03, total: 38}, 
+                     {id: "364", name: "Iran", china: .55, usa: .4, eu: .04, total: 47}, 
+                     {id: "368", name: "Iraq", china: .71, usa: .29, eu: 0, total: 7}, 
+                     {id: "372", name: "Ireland", china: .28, usa: .5, eu: .22, total: 18}, 
+                     {id: "376", name: "Israel", china: .1, usa: .85, eu: .05, total: 20}, 
+                     {id: "380", name: "Italy", china: .28, usa: .49, eu: .23, total: 131}, 
+                     {id: "384", name: "Ivory Coast", china: .5, usa: .5, eu: 0, total: 4}, 
+                     {id: "388", name: "Jamaica", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "392", name: "Japan", china: .23, usa: .68, eu: .09, total: 100}, 
+                     {id: "400", name: "Jordan", china: 1, usa: 0, eu: 0, total: 3}, 
+                     {id: "398", name: "Kazakhstan", china: .5, usa: .5, eu: 0, total: 20}, 
+                     {id: "404", name: "Kenya", china: .43, usa: .5, eu: .07, total: 28}, 
+                     {id: "414", name: "Kuwait", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "417", name: "Kyrgyzstan", china: .5, usa: .25, eu: .25, total: 4}, 
+                     {id: "418", name: "Laos", china: 1, usa: .25, eu: 0, total: 1},  
+                     {id: "428", name: "Latvia", china: .33, usa: .5, eu: .17, total: 6},
+                     {id: "422", name: "Lebanon", china: .33, usa: .58, eu: .08, total: 12},
+                     {id: "434", name: "Libya", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "438", name: "Liechtenstein", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "440", name: "Lithuania", china: .44, usa: .38, eu: .19, total: 16}, 
+                     {id: "442", name: "Luxembourg", china: .2, usa: .8, eu: 0, total: 5}, 
+                     {id: "446", name: "Macao", china: .6, usa: .4, eu: 0, total: 5}, 
+                     {id: "807", name: "Macedonia", china: .33, usa: .67, eu: 0, total: 3}, 
+                     {id: "450", name: "Madagascar", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "454", name: "Malawi", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "458", name: "Malaysia", china: .45, usa: .47, eu: .08, total: 38}, 
+                     {id: "466", name: "Mali", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "470", name: "Malta", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "480", name: "Mauritius", china: .4, usa: .5, eu: .1, total: 10}, 
+                     {id: "484", name: "Mexico", china: .47, usa: .4, eu: .13, total: 1028}, 
+                     {id: "498", name: "Moldova", china: .25, usa: .25, eu: .5, total: 4}, 
+                     {id: "492", name: "Monaco", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "496", name: "Mongolia", china: .38, usa: .54, eu: .08, total: 13}, 
+                     {id: "499", name: "Montenegro", china: 0, usa: 0, eu: 1, total: 1},  
+                     {id: "504", name: "Morocco", china: .5, usa: .44, eu: .06, total: 16},
+                     {id: "508", name: "Mozambique", china: .75, usa: .25, eu: 0, total: 4},
+                     {id: "104", name: "Myanmar [Burma]", china: .67, usa: .33, eu: 0, total: 3}, 
+                     {id: "516", name: "Nambia", china: 1, usa: 0, eu: 0, total: 3}, 
+                     {id: "524", name: "Nepal", china: .33, usa: .67, eu: 0, total: 9}, 
+                     {id: "528", name: "Netherlands", china: .35, usa: .31, eu: .34, total: 367}, 
+                     {id: "540", name: "New Caledonia", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "554", name: "New Zealand", china: .55, usa: .38, eu: .07, total: 42}, 
+                     {id: "558", name: "Nicarawa", china: .64, usa: .38, eu: 0, total: 14}, 
+                     {id: "562", name: "Niger", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "566", name: "Nigeria", china: .33, usa: .61, eu: .06, total: 18}, 
+                     {id: "578", name: "Norway", china: .31, usa: .52, eu: .17, total: 29}, 
+                     {id: "512", name: "Oman", china: .31, usa: .62, eu: .08, total: 13}, 
+                     {id: "586", name: "Pakistan", china: .64, usa: .3, eu: .06, total: 69}, 
+                     {id: "591", name: "Panama", china: .57, usa: .4, eu: .03, total: 37}, 
+                     {id: "598", name: "Papua New Guinea", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "600", name: "Paraguay", china: .54, usa: .42, eu: .04, total: 24}, 
+                     {id: "604", name: "Peru", china: .52, usa: .39, eu: .09, total: 323}, 
+                     {id: "608", name: "Philippines", china: .34, usa: .57, eu: .09, total: 35},  
+                     {id: "616", name: "Poland", china: .41, usa: .37, eu: .22, total: 97},
+                     {id: "620", name: "Portugal", china: .37, usa: .37, eu: .26, total: 97},
+                     {id: "630", name: "Puerto Rico", china: .33, usa: .56, eu: .11, total: 9}, 
+                     {id: "634", name: "Quatar", china: .25, usa: .5, eu: .25, total: 4}, 
+                     {id: "642", name: "Romania", china: .35, usa: .41, eu: .24, total: 29}, 
+                     {id: "643", name: "Russia", china: .44, usa: .41, eu: .15, total: 276}, 
+                     {id: "646", name: "Rwanda", china: .14, usa: .71, eu: .14, total: 7}, 
+                     {id: "882", name: "Samoa", china: 1, usa: 0, eu: 0, total: 2}, 
+                     {id: "682", name: "Saudi Arabia", china: .3, usa: .6, eu: .10, total: 10}, 
+                     {id: "686", name: "Senegal", china: 1, usa: 0, eu: 0, total: 1}, 
+                     {id: "688", name: "Serbia", china: .2, usa: .5, eu: .3, total: 10}, 
+                     {id: "702", name: "Singapore", china: .39, usa: .56, eu: .05, total: 80}, 
+                     {id: "703", name: "Slovakia", china: .22, usa: .44, eu: .33, total: 9}, 
+                     {id: "705", name: "Slovenia", china: .33, usa: 0, eu: .67, total: 3}, 
+                     {id: "706", name: "Somalia", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "710", name: "South Africa", china: .31, usa: .8, eu: .21, total: 29}, 
+                     {id: "410", name: "South Korea", china: .17, usa: .75, eu: .08, total: 75},
+                     {id: "728", name: "South Sudan", china: 0, usa: 1, eu: 0, total: 1}, 
+                     {id: "724", name: "Spain", china: .37, usa: .43, eu: .2, total: 366}, 
+                     {id: "144", name: "Sri Lanka", china: .74, usa: .16, eu: .1, total: 19}, 
+                     {id: "729", name: "Sudan", china: .5, usa: .5, eu: 0, total: 2}, 
+                     {id: "740", name: "Suriname", china: .5, usa: 0, eu: .5, total: 2}, 
+                     {id: "752", name: "Sweeden", china: .44, usa: .38, eu: .18, total: 63}, 
+                     {id: "756", name: "Switzerland", china: .39, usa: .33, eu: .28, total: 61}, 
+                     {id: "158", name: "Taiwan", china: .21, usa: .73, eu: .06, total: 52}, 
+                     {id: "762", name: "Tajkistan", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "834", name: "Tanzania", china: .33, usa: .67, eu: 0, total: 9}, 
+                     {id: "764", name: "Thailand", china: .5, usa: .42, eu: .08, total: 26}, 
+                     {id: "780", name: "Trinidad and Tobago", china: .5, usa: .42, eu: .08, total: 12}, 
+                     {id: "788", name: "Tunisia", china: .38, usa: .38, eu: .25, total: 8}, 
+                     {id: "792", name: "Turkey", china: .47, usa: .4, eu: .13, total: 176}, 
+                     {id: "796", name: "Turks and Caicos Islands", china: 0, usa: 1, eu: 0, total: 1},  
+                     {id: "850", name: "U.S. Virgin Islands", china: 0, usa: 0, eu: 1, total: 1}, 
+                     {id: "800", name: "Uganda", china: .67, usa: 0, eu: .33, total: 3}, 
+                     {id: "804", name: "Ukraine", china: .38, usa: .45, eu: .17, total: 107}, 
+                     {id: "784", name: "United Arab Emirates", china: .43, usa: .5, eu: .07, total: 14}, 
+                     {id: "826", name: "United Kingdom", china: .33, usa: .47, eu: .2, total: 411}, 
+                     {id: "840", name: "United States", china: .33, usa: .58, eu: .08, total: 1874},   
+                     {id: "858", name: "Uruguay", china: .41, usa: .44, eu: .15, total: 27}, 
+                     {id: "860", name: "Uzbekistan", china: .57, usa: .29, eu: .14, total: 14}, 
+                     {id: "862", name: "Venezuela", china: .43, usa: .47, eu: .1, total: 87}, 
+                     {id: "704", name: "Vietnam", china: .21, usa: .72, eu: .06, total: 47}, 
+                     {id: "894", name: "Zambia", china: .75, usa: 0, eu: .25, total: 4}, 
+                     {id: "716", name: "Zimbabwe", china: .25, usa: .75, eu: 0, total: 4},                                     
+                     ];
+      var chart = new d3plus.Geomap()
+          .select("#map3")
+          .data(popData)
+          .colorScale("eu")
+          .colorScaleConfig({scale: "jenks"})
+          .title("European Union")
+          .topojson("world-110m.json")
+          .tooltipConfig({
+              body: function(d) {
+                var table = "<table class='tooltip-table'>";
+                table += "<tr><td class='title'>Percentage:</td><td class='data'>" + d.eu + "</td></tr>";
+                table += "<tr><td class='title'>Total responses:</td><td class='data'>" + d.total + "</td></tr>";
+                table += "</table>";
+                return table;
+              },
+              footer: function(d) {
+                return "<sub class='tooltip-footer'>Percentage is based on a scale from (0-1)</sub>";
+              },
+              title: function(d) {
+                var txt = d.name;
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();;
+              }
+            })
+          .fitFilter(function(d) {
+      return ["us", "china", "eu", "tie"].indexOf(d.id) < 0;
+          });
+      chart.render();
+  </script> 
 </body>
 </html>
