@@ -7,6 +7,23 @@
        h1 {
       text-align: center;
     }  
+    .titleBold {
+      font-weight: bold;
+    }
+    .dataBold {
+      font-weight: bold;
+    }
+    .question {
+      font-size: 12px;
+      text-align: center;
+    }
+    .titleSmall {
+      font-size: 12px;
+    }
+    .dataSmall {
+      font-size: 12px;
+      text-align: center;
+    }
     .tooltip-table {
         width: 100%;
       }
@@ -90,7 +107,7 @@
             </tr>
         </tbody>
     </table>
-  <script src="https://d3plus.org/js/d3plus.v2.0.0-alpha.17.full.min.js"></script>
+    <script src="https://d3plus.org/js/d3plus.v2.0.0-alpha.17.full.min.js"></script>
   <div id ="bullets">
     <ul>
       <li>Data comes from a survey on the OEC website that asks "What is the world's top economic power?"</li>
@@ -579,27 +596,31 @@
                      {id: "894", name: "Zambia", china: .75, usa: 0, eu: .25, total: 4}, 
                      {id: "716", name: "Zimbabwe", china: .25, usa: .75, eu: 0, total: 4},                                     
                      ];
+                    
       var chart = new d3plus.Geomap()
           .select("#map1")
           .data(popData)
           .colorScale("china")
-          .colorScaleConfig({scale: "jenks"})
+          .colorScaleConfig({
+            color: ["#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", "#41ab5d", "#238b45", "#006d2c", "#00441b", "#252525"],
+            scale: "jenks"
+            })
           .title("China")
-          .topojson("world-110m copy.json")
+          .topojson("world-110m.json")
           .tooltipConfig({
               body: function(d) {
                 var table = "<table class='tooltip-table'>";
-                table += "<tr><td class='title'>Percentage:</td><td class='data'>" + d.china + "</td></tr>";
-                table += "<tr><td class='title'>Total Responses:</td><td class='data'>" + d.total + "</td></tr>";
+                table += "<tr><td class='question'>What is the world's top economic power?</td></tr>";
+                table += "<tr><td class='titleBold'>China:</td><td class='dataBold'>" + ((d.china * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='title'>USA:</td><td class='data'>" + ((d.usa * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='title'>EU:</td><td class='data'>" + ((d.eu * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='titleSmall'>Total Responses:</td><td class='dataSmall'>" + d.total + "</td></tr>";
                 table += "</table>";
                 return table;
               },
-              footer: function(d) {
-                return "<sub class='tooltip-footer'>Percentage is based on a scale from (0-1)</sub>";
-              },
               title: function(d) {
                 var txt = d.name;
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();;
+                return txt.toUpperCase();
               }
             })
             
@@ -772,27 +793,31 @@
           .select("#map2")
           .data(popData)
           .colorScale("usa")
-          .colorScaleConfig({scale: "jenks"})
+          .colorScaleConfig({
+            color: ["#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", "#41ab5d", "#238b45", "#006d2c", "#00441b", "#252525"],
+            scale: "jenks"
+            })
           .title("USA")
-          .topojson("world-110m copy.json")
+          .topojson("world-110m.json")
           .tooltipConfig({
-              body: function(d) {
+            body: function(d) {
                 var table = "<table class='tooltip-table'>";
-                table += "<tr><td class='title'>Percentage:</td><td class='data'>" + d.usa + "</td></tr>";
-                table += "<tr><td class='title'>Total Responses:</td><td class='data'>" + d.total + "</td></tr>";
+                table += "<tr><td class='question'>What is the world's top economic power?</td></tr>";
+                table += "<tr><td class='title'>China:</td><td class='data'>" + ((d.china * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='titleBold'>USA:</td><td class='dataBold'>" + ((d.usa * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='title'>EU:</td><td class='data'>" + ((d.eu * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='titleSmall'>Total Responses:</td><td class='dataSmall'>" + d.total + "</td></tr>";
                 table += "</table>";
                 return table;
               },
-              footer: function(d) {
-                return "<sub class='tooltip-footer'>Percentage is based on a scale from (0-1)</sub>";
-              },
               title: function(d) {
                 var txt = d.name;
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();;
+                return txt.toUpperCase();
               }
             })
+            
           .fitFilter(function(d) {
-      return ["tie"].indexOf(d.id) < 0;
+            return ["tie"].indexOf(d.id) < 0;
           });
       chart.render();
   </script> 
@@ -960,27 +985,31 @@
           .select("#map3")
           .data(popData)
           .colorScale("eu")
-          .colorScaleConfig({scale: "jenks"})
+          .colorScaleConfig({
+            color: ["#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", "#41ab5d", "#238b45", "#006d2c", "#00441b", "#252525"],
+            scale: "jenks"
+          })
           .title("European Union")
-          .topojson("world-110m copy.json")
+          .topojson("world-110m.json")
           .tooltipConfig({
-              body: function(d) {
+            body: function(d) {
                 var table = "<table class='tooltip-table'>";
-                table += "<tr><td class='title'>Percentage:</td><td class='data'>" + d.eu + "</td></tr>";
-                table += "<tr><td class='title'>Total responses:</td><td class='data'>" + d.total + "</td></tr>";
+                table += "<tr><td class='question'>What is the world's top economic power?</td></tr>";
+                table += "<tr><td class='title'>China:</td><td class='data'>" + ((d.china * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='title'>USA:</td><td class='data'>" + ((d.usa * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='titleBold'>EU:</td><td class='dataBold'>" + ((d.eu * 100) + "%")+ "</td></tr>";
+                table += "<tr><td class='titleSmall'>Total Responses:</td><td class='dataSmall'>" + d.total + "</td></tr>";
                 table += "</table>";
                 return table;
               },
-              footer: function(d) {
-                return "<sub class='tooltip-footer'>Percentage is based on a scale from (0-1)</sub>";
-              },
               title: function(d) {
                 var txt = d.name;
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();;
+                return txt.toUpperCase();
               }
             })
+            
           .fitFilter(function(d) {
-      return ["us", "china", "eu", "tie"].indexOf(d.id) < 0;
+            return ["tie"].indexOf(d.id) < 0;
           });
       chart.render();
   </script> 
